@@ -9,6 +9,13 @@ const nextConfig: NextConfig = {
       "subdomain",
       "files.stripe.com",
     ],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "sea1.ingest.uploadthing.com",
+        pathname: "/**",
+      },
+    ],
   },
   reactStrictMode: false,
 };
