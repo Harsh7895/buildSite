@@ -32,7 +32,7 @@ const Navigation = ({ user }: Props) => {
 
       <aside className="flex gap-2 items-center">
         <Link
-          href={"/agency"}
+          href={"/agency/sign-in"}
           className="bg-primary text-white p-2 px-4 rounded-md hover:bg-primary/50"
         >
           Login

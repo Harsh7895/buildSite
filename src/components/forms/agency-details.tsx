@@ -34,6 +34,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
+import { useToast } from "@/hooks/use-toast";
 
 import * as z from "zod";
 import FileUpload from "../global/file.upload";
@@ -48,7 +49,6 @@ import {
 } from "@/lib/queries";
 import { Button } from "../ui/button";
 import Loading from "../global/loading";
-import { useToast } from "@/hooks/use-toast";
 
 type Props = {
   data?: Partial<Agency>;
@@ -67,31 +67,26 @@ const FormSchema = z.object({
   agencyLogo: z.string().min(1),
 });
 
-{
-  /*disable-eslint*/
-}
-
 const AgencyDetails = ({ data }: Props) => {
-  const router = useRouter();
   const { toast } = useToast();
+  const router = useRouter();
   const [deletingAgency, setDeletingAgency] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     mode: "onChange",
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: data?.name || "",
-      companyEmail: data?.companyEmail || "",
-      companyPhone: data?.companyPhone || "",
+      name: data?.name,
+      companyEmail: data?.companyEmail,
+      companyPhone: data?.companyPhone,
       whiteLabel: data?.whiteLabel || false,
-      address: data?.address || "",
-      city: data?.city || "",
-      zipCode: data?.zipCode || "",
-      state: data?.state || "",
-      country: data?.country || "",
-      agencyLogo: data?.agencyLogo || "",
+      address: data?.address,
+      city: data?.city,
+      zipCode: data?.zipCode,
+      state: data?.state,
+      country: data?.country,
+      agencyLogo: data?.agencyLogo,
     },
   });
-
   const isLoading = form.formState.isSubmitting;
 
   useEffect(() => {
@@ -101,7 +96,6 @@ const AgencyDetails = ({ data }: Props) => {
   }, [data]);
 
   const handleSubmit = async (values: z.infer<typeof FormSchema>) => {
-    console.log("started");
     try {
       let newUserData;
       let custId;
@@ -127,15 +121,25 @@ const AgencyDetails = ({ data }: Props) => {
             state: values.zipCode,
           },
         };
+
+        // const customerResponse = await fetch("/api/stripe/create-customer", {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify(bodyData),
+        // });
+        // const customerData: { customerId: string } =
+        //   await customerResponse.json();
+        // custId = customerData.customerId;
       }
 
-      console.log("init user started");
-      console.log(data);
       newUserData = await initUser({ role: "AGENCY_OWNER" });
-      // if (!data?.id) return;
-      console.log("upsert agency started");
-      const agencyData = {
-        agencyId: data?.id || v4(),
+      // if (!data?.customerId && !custId) return;
+
+      const response = await upsertAgency({
+        id: data?.id ? data.id : v4(),
+        customerId: data?.customerId || custId || "",
         address: values.address,
         agencyLogo: values.agencyLogo,
         city: values.city,
@@ -145,22 +149,26 @@ const AgencyDetails = ({ data }: Props) => {
         state: values.state,
         whiteLabel: values.whiteLabel,
         zipCode: values.zipCode,
+        createdAt: new Date(),
+        updatedAt: new Date(),
         companyEmail: values.companyEmail,
         connectAccountId: "",
         goal: 5,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const response = await upsertAgency(agencyData);
-      console.log("Upsert Response:", response);
+      });
+      toast({
+        title: "Created Agency",
+      });
       if (data?.id) return router.refresh();
       if (response) {
         return router.refresh();
       }
-      router.refresh();
     } catch (error) {
       console.log(error);
+      toast({
+        variant: "destructive",
+        title: "Oppse!",
+        description: "could not create your agency",
+      });
     }
   };
   const handleDeleteAgency = async () => {
@@ -189,9 +197,7 @@ const AgencyDetails = ({ data }: Props) => {
     <AlertDialog>
       <Card className="w-full">
         <CardHeader>
-          <CardTitle onClick={() => console.log("hello")}>
-            Agency Information
-          </CardTitle>
+          <CardTitle>Agency Information</CardTitle>
           <CardDescription>
             Lets create an agency for you business. You can edit agency settings
             later from the agency settings tab.
