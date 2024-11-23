@@ -1,7 +1,6 @@
 'use server';
 
 import { clerkClient, currentUser } from '@clerk/nextjs/server';
-import { users } from '@clerk/clerk-sdk-node';
 import { db } from './db';
 import { redirect } from 'next/navigation';
 import {
@@ -24,6 +23,8 @@ import { v4 } from 'uuid';
 // } from ''
 // import { z } from 'zod'
 // import { revalidatePath } from 'next/cache'
+
+const client = await clerkClient();
 
 export const getAuthUserDetails = async () => {
   const user = await currentUser();
@@ -172,7 +173,7 @@ export const verifyAndAcceptInvitation = async () => {
     });
 
     if (userDetails) {
-      await users.updateUserMetadata(user.id, {
+      await client.users.updateUserMetadata(user.id, {
         privateMetadata: {
           role: userDetails.role || 'SUBACCOUNT_USER',
         },
@@ -229,7 +230,7 @@ export const initUser = async (newUser: Partial<User>) => {
     },
   });
 
-  await users.updateUserMetadata(user.id, {
+  await client.users.updateUserMetadata(user.id, {
     privateMetadata: {
       role: newUser.role || 'SUBACCOUNT_USER',
     },
