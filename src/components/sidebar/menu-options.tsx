@@ -103,7 +103,7 @@ const MenuOptions = ({
           <Popover>
             <PopoverTrigger asChild>
               <Button
-                className="w-full my-4 flex items-center justify-between py-8 whitespace-pre-wrap"
+                className="w-full my-4 flex items-center justify-between py-8"
                 variant="ghost"
               >
                 <div className="flex items-center text-left gap-2">
@@ -123,7 +123,7 @@ const MenuOptions = ({
                 </div>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[300px] h-80 mt-4 z-[200]">
+            <PopoverContent className="w-80 h-80 mt-4 z-[200]">
               <Command className="rounded-lg">
                 <CommandInput placeholder="Search Accounts..." />
                 <CommandList className="pb-16">
@@ -278,7 +278,7 @@ const MenuOptions = ({
                     return (
                       <CommandItem
                         key={sidebarOptions.id}
-                        className=" w-full"
+                        className="md:w-[320px] w-full"
                       >
                         <Link
                           href={sidebarOptions.link}

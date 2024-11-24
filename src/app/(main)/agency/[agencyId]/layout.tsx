@@ -28,11 +28,11 @@ const layout = async ({ children, params }: Props) => {
     return redirect('/agency')
   }
 
-  // if (
-  //   user.privateMetadata.role !== 'AGENCY_OWNER' &&
-  //   user.privateMetadata.role !== 'AGENCY_ADMIN'
-  // )
-  //   return <Unauthorized />
+  if (
+    user.privateMetadata.role !== 'AGENCY_OWNER' &&
+    user.privateMetadata.role !== 'AGENCY_ADMIN'
+  )
+    return <Unauthorized />
 
   let allNoti: any = []
   const notifications = await getNotificationAndUser(agencyId)
