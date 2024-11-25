@@ -7,6 +7,7 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandItem,
+  CommandList,
 } from '@/components/ui/command'
 import {
   Popover,
@@ -64,8 +65,9 @@ const PipelineInfoBar = ({ pipelineId, pipelines, subAccountId }: Props) => {
           </PopoverTrigger>
           <PopoverContent className="w-[200px] p-0">
             <Command>
-              <CommandEmpty>No pipelines found.</CommandEmpty>
-              <CommandGroup>
+                <CommandList>
+                <CommandEmpty>No pipelines found.</CommandEmpty>
+              <CommandGroup heading={""}>
                 {pipelines.map((pipeline) => (
                   <Link
                     key={pipeline.id}
@@ -98,6 +100,7 @@ const PipelineInfoBar = ({ pipelineId, pipelines, subAccountId }: Props) => {
                   Create Pipeline
                 </Button>
               </CommandGroup>
+                </CommandList>
             </Command>
           </PopoverContent>
         </Popover>

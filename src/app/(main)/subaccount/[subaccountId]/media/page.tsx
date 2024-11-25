@@ -8,7 +8,7 @@ type Props = {
 }
 
 const MediaPage = async({params}:Props) => {
-    const {subaccountId} = await params
+    const {subaccountId} =  params
     const data = await getMedia(subaccountId)
   return (
     <BlurPage>

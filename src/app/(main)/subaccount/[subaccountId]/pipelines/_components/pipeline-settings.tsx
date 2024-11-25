@@ -16,7 +16,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { deletePipeline } from '@/lib/queries'
-import { toast } from '@/components/ui/use-toast'
+import { toast } from '@/hooks/use-toast'
 import { useRouter } from 'next/navigation'
 
 const PipelineSettings = ({

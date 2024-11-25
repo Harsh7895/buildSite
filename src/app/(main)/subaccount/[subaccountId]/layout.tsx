@@ -17,7 +17,7 @@ type Props = {
 }
 
 const SubaccountLayout = async ({ children, params }: Props) => {
-  const {subaccountId} = await params;
+  const {subaccountId} =  params;
   const agencyId = await verifyAndAcceptInvitation()
   if (!agencyId) return <Unauthorized />
   const user = await currentUser()

@@ -11,7 +11,7 @@ type Props = {
 }
 
 const TeamPage = async ({ params }: Props) => {
-    const {agencyId} = await params;
+    const {agencyId} =  params;
   const authUser = await currentUser()
   const teamMembers = await db.user.findMany({
     where: {

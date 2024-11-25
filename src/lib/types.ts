@@ -1,7 +1,17 @@
-import { Contact, Lane, Prisma, Role, Tag, Ticket, User } from '@prisma/client';
+import {
+  Contact,
+  Lane,
+  Notification,
+  Prisma,
+  Role,
+  Tag,
+  Ticket,
+  User,
+} from '@prisma/client';
 import {
   _getTicketsWithAllRelations,
   getAuthUserDetails,
+  getFunnels,
   getMedia,
   getPipelineDetails,
   getTicketsWithTags,
@@ -29,8 +39,10 @@ export type UserWithPermissionsAndSubAccounts = Prisma.PromiseReturnType<
   typeof getUserPermissions
 >;
 
-export type AuthUserWithAgencySigebarOptionsSubAccounts =
-  Prisma.PromiseReturnType<typeof getAuthUserDetails>;
+export const FunnelPageSchema = z.object({
+  name: z.string().min(1),
+  pathName: z.string().optional(),
+});
 
 const __getUsersWithAgencySubAccountPermissionsSidebarOptions = async (
   agencyId: string
@@ -43,6 +55,9 @@ const __getUsersWithAgencySubAccountPermissionsSidebarOptions = async (
     },
   });
 };
+
+export type AuthUserWithAgencySigebarOptionsSubAccounts =
+  Prisma.PromiseReturnType<typeof getAuthUserDetails>;
 
 export type UsersWithAgencySubAccountPermissionsSidebarOptions =
   Prisma.PromiseReturnType<
@@ -99,3 +114,34 @@ export const TicketFormSchema = z.object({
 export type TicketDetails = Prisma.PromiseReturnType<
   typeof _getTicketsWithAllRelations
 >;
+
+export const ContactUserFormSchema = z.object({
+  name: z.string().min(1, 'Required'),
+  email: z.string().email(),
+});
+
+export type Address = {
+  city: string;
+  country: string;
+  line1: string;
+  postal_code: string;
+  state: string;
+};
+
+export type ShippingInfo = {
+  address: Address;
+  name: string;
+};
+
+export type StripeCustomerType = {
+  email: string;
+  name: string;
+  shipping: ShippingInfo;
+  address: Address;
+};
+
+export type FunnelsForSubAccount = Prisma.PromiseReturnType<
+  typeof getFunnels
+>[0];
+
+export type UpsertFunnelPage = Prisma.FunnelPageCreateWithoutFunnelInput;

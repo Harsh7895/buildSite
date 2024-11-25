@@ -5,7 +5,7 @@ type Props = {
 }
 
 const SubAccountIdPage = async({params}:Props) => {
-    const {subaccountId} = await params
+    const {subaccountId} =  params
   return (
     <div>
       {subaccountId}

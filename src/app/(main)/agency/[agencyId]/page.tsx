@@ -1,5 +1,5 @@
 const Page = async ({ params }: { params: { agencyId: string } }) => {
-  const { agencyId } = await params; 
+  const { agencyId } =  params; 
 
   return <div>{agencyId}</div>;
 };
