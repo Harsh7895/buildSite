@@ -19,6 +19,7 @@ import {
 } from './queries';
 import { db } from './db';
 import { z } from 'zod';
+import Stripe from 'stripe';
 
 export type NotificationWithUser =
   | ({
@@ -145,3 +146,5 @@ export type FunnelsForSubAccount = Prisma.PromiseReturnType<
 >[0];
 
 export type UpsertFunnelPage = Prisma.FunnelPageCreateWithoutFunnelInput;
+
+export type PricesList = Stripe.ApiList<Stripe.Price>;
